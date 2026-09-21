@@ -579,6 +579,7 @@ const App = {
     if (choiceIdx === q.correct) {
       App.quizScore++;
       App.addScore(50);
+      App.playSfx();
     }
 
     App.renderQuizQuestion(qIdx);
@@ -622,24 +623,38 @@ const App = {
   },
 
   // ============================================================
-  // BACKGROUND MUSIC CONTROLLER (INTERACTIVE GAMES ONLY)
+  // BACKGROUND MUSIC & SFX CONTROLLER (INTERACTIVE GAMES ONLY)
   // ============================================================
   initAudio: () => {
-    const audio = document.getElementById('gameBgmAudio');
-    if (audio) {
-      audio.volume = 0.45;
-    }
+    const bgm1 = document.getElementById('gameBgmAudio');
+    const bgm2 = document.getElementById('gameBgmQuizAudio');
+    const sfx = document.getElementById('gameSfxAudio');
+    if (bgm1) bgm1.volume = 0.45;
+    if (bgm2) bgm2.volume = 0.45;
+    if (sfx) sfx.volume = 0.65;
   },
 
   isGameSlide: (slideId) => {
-    // Tanging ang interactive games lamang ang may tugtog
+    // Tanging ang interactive games lamang ang may background music
     return slideId === 'motivation-game' || slideId === 'quiz';
+  },
+
+  playSfx: () => {
+    if (App.isMusicMuted) return;
+    const sfx = document.getElementById('gameSfxAudio');
+    if (sfx && typeof sfx.play === 'function') {
+      try {
+        sfx.currentTime = 0;
+        const p = sfx.play();
+        if (p !== undefined) p.catch(() => {});
+      } catch (e) {}
+    }
   },
 
   handleSlideAudio: (slideId) => {
     if (App.isGameSlide(slideId)) {
       if (!App.isMusicMuted) {
-        App.playGameMusic();
+        App.playGameMusic(slideId);
       }
     } else {
       App.stopGameMusic();
@@ -647,9 +662,20 @@ const App = {
     App.updateMusicButtonUI();
   },
 
-  playGameMusic: () => {
-    const audio = document.getElementById('gameBgmAudio');
-    if (!audio || App.isMusicMuted) return;
+  playGameMusic: (slideId) => {
+    if (App.isMusicMuted) return;
+    const targetAudioId = slideId === 'quiz' ? 'gameBgmQuizAudio' : 'gameBgmAudio';
+    const otherAudioId = slideId === 'quiz' ? 'gameBgmAudio' : 'gameBgmQuizAudio';
+
+    // Itigil ang kabilang track kung tumutugtog
+    const otherAudio = document.getElementById(otherAudioId);
+    if (otherAudio && !otherAudio.paused) {
+      otherAudio.pause();
+      otherAudio.currentTime = 0;
+    }
+
+    const audio = document.getElementById(targetAudioId) || document.getElementById('gameBgmAudio');
+    if (!audio) return;
     if (App.fadeInterval) clearInterval(App.fadeInterval);
 
     if (typeof audio.play !== 'function') return;
@@ -669,37 +695,42 @@ const App = {
         }, 60);
       }).catch(err => {
         // Autoplay policy: tutugtog sa unang interaksyon ng guro/mag-aaral
-        console.log('Autoplay: magpe-play ang musika sa pagkilos ng user.');
+        console.log('Autoplay: magpe-play ang musika sa unang pagkilos ng user.');
       });
     }
   },
 
   stopGameMusic: () => {
-    const audio = document.getElementById('gameBgmAudio');
-    if (!audio) return;
+    const audios = [
+      document.getElementById('gameBgmAudio'),
+      document.getElementById('gameBgmQuizAudio')
+    ].filter(Boolean);
+
     if (App.fadeInterval) clearInterval(App.fadeInterval);
 
-    if (audio.paused) return;
-    if (typeof audio.pause !== 'function') return;
+    audios.forEach(audio => {
+      if (audio.paused) return;
+      if (typeof audio.pause !== 'function') return;
 
-    let vol = audio.volume;
-    if (vol <= 0.05) {
-      audio.pause();
-      audio.currentTime = 0;
-      return;
-    }
-
-    App.fadeInterval = setInterval(() => {
-      vol = Math.max(0, +(vol - 0.08).toFixed(2));
-      if (audio) audio.volume = vol;
-      if (vol <= 0) {
-        clearInterval(App.fadeInterval);
-        if (audio) {
-          audio.pause();
-          audio.currentTime = 0;
-        }
+      let vol = audio.volume;
+      if (vol <= 0.05) {
+        audio.pause();
+        audio.currentTime = 0;
+        return;
       }
-    }, 50);
+
+      App.fadeInterval = setInterval(() => {
+        vol = Math.max(0, +(vol - 0.08).toFixed(2));
+        if (audio) audio.volume = vol;
+        if (vol <= 0) {
+          clearInterval(App.fadeInterval);
+          if (audio) {
+            audio.pause();
+            audio.currentTime = 0;
+          }
+        }
+      }, 50);
+    });
   },
 
   toggleMusic: () => {
@@ -709,7 +740,7 @@ const App = {
       App.stopGameMusic();
     } else {
       if (currentSlide && App.isGameSlide(currentSlide.id)) {
-        App.playGameMusic();
+        App.playGameMusic(currentSlide.id);
       }
     }
     App.updateMusicButtonUI();

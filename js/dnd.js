@@ -221,6 +221,9 @@ const DnDController = {
     const container = document.getElementById('items-' + categoryId);
     if (container) {
       const isCorrect = item.correct === categoryId;
+      if (isCorrect && typeof App !== 'undefined' && App.playSfx) {
+        App.playSfx();
+      }
       const badge = document.createElement('div');
       badge.className = 'placed-badge ' + (isCorrect ? 'correct' : 'wrong');
       badge.innerHTML = `${item.label} ${isCorrect ? '✓' : '✕ (Iwasto)'}`;
