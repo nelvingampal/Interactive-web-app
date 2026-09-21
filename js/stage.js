@@ -93,7 +93,7 @@ const StageController = {
         StageController.presentBtn.innerHTML = `<span>✕</span><span class="hud-fs-label">UMALIS</span>`;
         StageController.presentBtn.style.background = 'linear-gradient(135deg, #DC2626, #991B1B)';
       } else {
-        StageController.presentBtn.innerHTML = `<span>📺</span><span class="hud-fs-label">FULLSCREEN</span>`;
+        StageController.presentBtn.innerHTML = `<span>📺</span><span class="hud-fs-label">BUONG SCREEN</span>`;
         StageController.presentBtn.style.background = '';
       }
     }

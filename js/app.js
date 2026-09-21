@@ -156,19 +156,19 @@ const App = {
     if (!titleEl || !subtitleEl) return;
 
     if (slideCfg.id === 'quiz') {
-      titleEl.textContent = "EVALUATION QUEST!";
+      titleEl.textContent = "PAGTATAYA SA ARALIN!";
       subtitleEl.textContent = "★ ★ PILIIN ANG TAMANG SAGOT! ★ ★";
     } else if (slideCfg.id.startsWith('analysis')) {
-      titleEl.textContent = "PAGSUSURI QUEST!";
+      titleEl.textContent = "PAGSUSURI SA ARALIN!";
       subtitleEl.textContent = "★ ★ MATALINONG PAGSUSURI NG MAG-AARAL ★ ★";
     } else if (slideCfg.id === 'motivation-game') {
-      titleEl.textContent = "MARKET SORTING CHALLENGE!";
-      subtitleEl.textContent = "★ ★ I-DRAG AT I-PANGKAT ANG MGA PRODUKTO ★ ★";
+      titleEl.textContent = "HAMON SA PAG-UURI NG PAMILIHAN!";
+      subtitleEl.textContent = "★ ★ HILAHIN AT I-PANGKAT ANG MGA PRODUKTO ★ ★";
     } else if (slideCfg.id === 'abs-def' || slideCfg.id.startsWith('abs-')) {
       titleEl.textContent = "ESTRAKTURA NG PAMILIHAN";
       subtitleEl.textContent = "★ ★ ARALIN AT MGA KATANGIAN ★ ★";
     } else if (slideCfg.id === 'application' || slideCfg.id === 'rubric') {
-      titleEl.textContent = "SURIIN AT I-ARTE!";
+      titleEl.textContent = "SURIIN AT ISADULA!";
       subtitleEl.textContent = "★ ★ PANGKATANG DULA-DULAAN ★ ★";
     } else {
       titleEl.textContent = slideCfg.nav.toUpperCase();
@@ -186,8 +186,8 @@ const App = {
     if (prevBtn) prevBtn.disabled = index === 0;
     if (nextBtn) nextBtn.disabled = index === total - 1;
 
-    if (backLabel) backLabel.textContent = `(PAGE ${Math.max(1, index)})`;
-    if (nextLabel) nextLabel.textContent = `(PAGE ${Math.min(total, index + 2)})`;
+    if (backLabel) backLabel.textContent = `(PAHINA ${Math.max(1, index)})`;
+    if (nextLabel) nextLabel.textContent = `(PAHINA ${Math.min(total, index + 2)})`;
 
     // Update bottom stepper (1 to 5 mapping across major phases)
     let activeStep = 1;
@@ -326,7 +326,7 @@ const App = {
     const completeCount = [1, 2, 3, 4].filter(g => (App.attendanceTally[g] || 0) === 0).length;
 
     if (totalAbsent === 0) {
-      return `<span style="color:#4ADE80; font-size:18px;">🌟</span> <span><b>100% ATTENDANCE:</b> Lahat ng 4 na Pangkat ay Kompleto! (+50 Class XP Active)</span>`;
+      return `<span style="color:#4ADE80; font-size:18px;">🌟</span> <span><b>100% PAGDALO:</b> Lahat ng 4 na Pangkat ay Kompleto! (+50 Karagdagang XP)</span>`;
     } else {
       return `<span style="color:#FBBF24; font-size:18px;">📋</span> <span><b>TALAAN:</b> ${completeCount} sa 4 na Pangkat ang Kompleto · May kabuuang <b>${totalAbsent} lumiban</b>.</span>`;
     }
@@ -419,7 +419,7 @@ const App = {
       fb.innerHTML = `
         <div class="anim-fade-up ${isBest ? 'anim-celebrate' : 'anim-shake'}" style="padding:12px 18px; border-radius:10px; background:${isBest ? 'rgba(20, 83, 45, 0.95)' : 'rgba(120, 53, 15, 0.95)'}; border:2px solid ${isBest ? '#22C55E' : '#F59E0B'}; box-shadow:0 0 16px ${isBest ? 'rgba(34, 197, 94, 0.6)' : 'rgba(245, 158, 11, 0.6)'};">
           <div style="font-family:'Space Grotesk',sans-serif; font-weight:900; font-size:18px; color:${isBest ? '#86EFAC' : '#FDE047'}; margin-bottom:4px;">
-            ${isBest ? '🎉 Pinakamalapit sa tamang pagsusuri ✓ (+50 SCORE!)' : '💡 Pagpapalalim ng Guro sa Talakayan:'}
+            ${isBest ? '🎉 Pinakamalapit sa tamang pagsusuri ✓ (+50 PUNTOS!)' : '💡 Pagpapalalim ng Guro sa Talakayan:'}
           </div>
           <p style="font-size:17px; font-weight:800; line-height:1.45; color:#FFFFFF; margin:0;">
             ${item.insight}
@@ -427,7 +427,7 @@ const App = {
           <div style="margin-top:10px;">
             ${qIdx < lessonData.analysisQuestions.length - 1 
               ? `<button class="btn-arcade-gold" style="font-size:14px; padding:8px 22px; font-weight:800;" onclick="App.nextSlide()">Susunod na Tanong (Tanong ${qIdx + 2}) ➔</button>`
-              : `<button class="btn-arcade-gold" style="font-size:14px; padding:8px 22px; font-weight:800;" onclick="App.jumpToId('abs-def')">Magpatuloy sa Abstraction (Aralin) ➔</button>`
+              : `<button class="btn-arcade-gold" style="font-size:14px; padding:8px 22px; font-weight:800;" onclick="App.jumpToId('abs-def')">Magpatuloy sa Pagtalakay sa Aralin ➔</button>`
             }
           </div>
         </div>`;
@@ -468,7 +468,7 @@ const App = {
           <div style="margin-top:10px;">
             ${qIdx < lessonData.analysisQuestions.length - 1 
               ? `<button class="btn-arcade-gold" style="font-size:14px; padding:8px 22px; font-weight:800;" onclick="App.nextSlide()">Susunod na Tanong (Tanong ${qIdx + 2}) ➔</button>`
-              : `<button class="btn-arcade-gold" style="font-size:14px; padding:8px 22px; font-weight:800;" onclick="App.jumpToId('abs-def')">Magpatuloy sa Abstraction (Aralin) ➔</button>`
+              : `<button class="btn-arcade-gold" style="font-size:14px; padding:8px 22px; font-weight:800;" onclick="App.jumpToId('abs-def')">Magpatuloy sa Pagtalakay sa Aralin ➔</button>`
             }
           </div>
         </div>`;
@@ -547,7 +547,7 @@ const App = {
       fbBox.innerHTML = `
         <div class="anim-fade-up" style="padding:8px 14px; border-radius:8px; background:${isCorrect ? 'rgba(20, 83, 45, 0.95)' : 'rgba(127, 29, 29, 0.95)'}; border:2px solid ${isCorrect ? '#22C55E' : '#EF4444'}; box-shadow:0 0 14px ${isCorrect ? 'rgba(34, 197, 94, 0.6)' : 'rgba(239, 68, 68, 0.6)'};">
           <div style="font-weight:900; font-size:14.5px; color:${isCorrect ? '#86EFAC' : '#FCA5A5'}; margin-bottom:2px;">
-            ${isCorrect ? '✓ TAMA ANG SAGOT! (+50 SCORE!)' : '✕ MALI ANG SAGOT!'}
+            ${isCorrect ? '✓ TAMA ANG SAGOT! (+50 PUNTOS!)' : '✕ MALI ANG SAGOT!'}
           </div>
           <p style="font-size:13.5px; font-weight:700; color:#F8FAFC; margin:0;">
             ${q.explanation}
@@ -595,10 +595,10 @@ const App = {
             KABUUANG ISKOR: ${App.quizScore} / ${lessonData.quizQuestions.length} (${pct}%)
           </h2>
           <p style="font-size:16px; font-weight:800; color:#F8FAFC; margin-bottom:12px;">
-            ${App.quizScore >= 4 ? '🎉 Napakahusay! Nakamit mo ang Quiz Ace Badge!' : '💡 Magaling! Pagbalik-aralan ang mga katangian ng bawat estraktura.'}
+            ${App.quizScore >= 4 ? '🎉 Napakahusay! Nakamit mo ang Medalya ng Henyo sa Pagsusulit!' : '💡 Magaling! Pagbalik-aralan ang mga katangian ng bawat estraktura.'}
           </p>
           <div style="display:flex; justify-content:center; gap:14px;">
-            <button class="btn-arcade-blue" style="font-size:12px; padding:6px 18px;" onclick="App.resetQuiz()">🔄 Ulitin ang Quiz</button>
+            <button class="btn-arcade-blue" style="font-size:12px; padding:6px 18px;" onclick="App.resetQuiz()">🔄 Ulitin ang Pagsusulit</button>
             <button class="btn-arcade-gold" style="font-size:12px; padding:6px 18px;" onclick="App.jumpToId('assignment')">Tumuloy sa Takdang-Aralin ➔</button>
           </div>
         </div>
