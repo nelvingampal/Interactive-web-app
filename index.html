@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketplace Economics Quest · Kahulugan at Estraktura ng Pamilihan (Ekonomiks 9)</title>
+  <meta name="description" content="DepEd Grade 9 Araling Panlipunan Interactive Presentation: Marketplace Economics Quest.">
+
+  <!-- Google Fonts: Space Grotesk, Bungee, Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Outfit:wght@500;600;700;800;900&family=Space+Grotesk:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Modular Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/backgrounds.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+  <!-- App Viewport for letterbox centering -->
+  <div id="appViewport">
+    <!-- Floating Fullscreen Exit Notice -->
+    <div id="fullscreenExitNotice">
+      <span>✕ Umalis sa Present Mode (o pindutin ang Esc)</span>
+    </div>
+
+    <!-- Fixed 16:9 Stage Container (1280x720) -->
+    <div id="slideStage" class="stage-night-market">
+      
+      <!-- Hanging Warm Fairy Lights String -->
+      <div class="fairy-lights-string"></div>
+
+      <!-- ============================================================
+           TOP GAME HUD BAR
+           ============================================================ -->
+      <header class="game-hud-bar">
+        <!-- Home Button -->
+        <button class="hud-btn-home" onclick="App.jumpToId('menu')" title="Bumalik sa Talaan ng Aralin">
+          <span class="hud-home-icon">🏠</span>
+          <div class="hud-home-text">
+            <span class="hud-home-main">HOME</span>
+            <span class="hud-home-sub">(MENU)</span>
+          </div>
+        </button>
+
+        <!-- Marketplace Economics Quest Title Badge -->
+        <div class="hud-title-badge">
+          <div class="hud-title-text">
+            <span class="hud-title-main">MARKETPLACE</span>
+            <span class="hud-title-sub">ECONOMICS QUEST 🛒</span>
+          </div>
+        </div>
+
+        <!-- HUD Game Stats Widgets -->
+        <div class="hud-stats-group">
+          <!-- 1. Score Widget -->
+          <div class="hud-widget">
+            <div class="hud-coin-icon">₱</div>
+            <div class="hud-stat-meta">
+              <span class="hud-stat-label">SCORE</span>
+              <span class="hud-stat-value" id="hudScoreVal">250</span>
+            </div>
+          </div>
+
+          <!-- 2. Level Badge -->
+          <div class="hud-level-badge">
+            <span class="hud-star-icon">★</span>
+            <div class="hud-stat-meta">
+              <span class="hud-stat-label">LEVEL <span id="hudLevelNum">1</span></span>
+              <span class="hud-level-role">ECONOMICS EXPLORER</span>
+            </div>
+          </div>
+
+          <!-- 3. XP Progress Bar -->
+          <div class="hud-xp-widget">
+            <span class="hud-xp-badge">XP</span>
+            <div class="hud-stat-meta">
+              <div class="hud-xp-meta">
+                <span id="hudXpText">250 / 500</span>
+              </div>
+              <div class="hud-xp-track">
+                <div id="hudXpBar" class="hud-xp-bar"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Timer Pill -->
+          <div class="hud-timer-pill">
+            <span class="hud-timer-icon">⏱️</span>
+            <span>5 MINS</span>
+          </div>
+
+          <!-- Fullscreen Toggle -->
+          <button class="hud-btn-fs" id="presentModeBtn" title="I-present nang Fullscreen (F)">
+            <span>📺</span>
+            <span class="hud-fs-label">FULLSCREEN</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- ============================================================
+           MAIN THREE-COLUMN DESK ARENA
+           ============================================================ -->
+      <main class="game-arena-layout">
+        
+        <!-- LEFT COLUMN: LESSON INFO TABLET -->
+        <aside class="sidebar-tablet-left">
+          <div class="tablet-header-tag">
+            LESSON INFO
+          </div>
+          <div class="tablet-content-body">
+            <div class="tablet-info-row">
+              <span class="tablet-icon">🎓</span>
+              <div>
+                <div class="tablet-label">Subject</div>
+                <div>Araling Panlipunan 9</div>
+              </div>
+            </div>
+            <div class="tablet-info-row">
+              <span class="tablet-icon">📖</span>
+              <div>
+                <div class="tablet-label">Grade Level</div>
+                <div>Baitang 9 (Ekonomiks)</div>
+              </div>
+            </div>
+            <div class="tablet-info-row">
+              <span class="tablet-icon">🎯</span>
+              <div>
+                <div class="tablet-label">MELC Code</div>
+                <div>AP9MYK-IHe-11</div>
+              </div>
+            </div>
+            <div class="tablet-info-row">
+              <span class="tablet-icon">🏫</span>
+              <div>
+                <div class="tablet-label">Paksa</div>
+                <div>Estraktura ng Pamilihan</div>
+              </div>
+            </div>
+            <div class="tablet-info-row">
+              <span class="tablet-icon">📅</span>
+              <div>
+                <div class="tablet-label">Markahan</div>
+                <div>Ikalawang Markahan</div>
+              </div>
+            </div>
+          </div>
+          <!-- Stall Market Prop docked at base of left tablet -->
+          <div class="left-market-prop" id="leftMarketPropContainer"></div>
+        </aside>
+
+        <!-- CENTER COLUMN: MAIN GAME ARENA & MARQUEE SIGNBOARD -->
+        <section class="center-game-arena">
+          <!-- 3D Scallop Awning Canopy -->
+          <div class="scallop-canopy"></div>
+
+          <!-- Illuminated Marquee Signboard -->
+          <div class="marquee-signboard">
+            <!-- Glowing Marquee Bulbs Track along Golden Border -->
+            <div class="marquee-bulbs-track" id="marqueeBulbsContainer"></div>
+
+            <!-- Dynamic Marquee Header Title -->
+            <div class="marquee-header-wrap">
+              <div class="marquee-main-title" id="marqueeTitle">EVALUATION QUEST!</div>
+              <div class="marquee-sub-title" id="marqueeSubtitle">★ ★ PILIIN ANG TAMANG SAGOT! ★ ★</div>
+            </div>
+
+            <!-- Dynamic Slide Content Container -->
+            <div class="marquee-slide-body" id="slideCanvas">
+              <!-- Rendered slides injected dynamically here -->
+            </div>
+          </div>
+        </section>
+
+        <!-- RIGHT COLUMN: LEADERBOARD & COIN STACK -->
+        <aside class="sidebar-tablet-right">
+          <!-- Leaderboard Tablet -->
+          <div class="leaderboard-tablet">
+            <div class="tablet-header-tag leaderboard-header-tag">
+              LEADERBOARD
+            </div>
+            <div class="leaderboard-list" id="leaderboardList">
+              <div class="lb-row">
+                <span>🥇 Pangkat 1</span>
+                <span class="lb-score-gold" id="lbScore1">500</span>
+              </div>
+              <div class="lb-row">
+                <span>🥈 Pangkat 2</span>
+                <span class="lb-score-silver" id="lbScore2">350</span>
+              </div>
+              <div class="lb-row">
+                <span>🥉 Pangkat 3</span>
+                <span class="lb-score-bronze" id="lbScore3">250</span>
+              </div>
+              <div class="lb-row">
+                <span>🏅 Pangkat 4</span>
+                <span class="lb-score-bronze" id="lbScore4">200</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Badges Earned Container -->
+          <div class="badges-container">
+            <div class="badges-header">BADGES EARNED</div>
+            <div class="badge-slots-row">
+              <div class="badge-slot earned" title="Pagsusuri Champion">🏅</div>
+              <div class="badge-slot earned" title="Sorting Master">🌾</div>
+              <div class="badge-slot earned" title="Market Explorer">🏪</div>
+              <div class="badge-slot" title="Roleplay Artist">🎭</div>
+              <div class="badge-slot" title="Quiz Ace">🏆</div>
+            </div>
+          </div>
+
+          <!-- 3D Stack of Golden ₱ Coins with Ambient Glow -->
+          <div class="coin-stack-container" id="coinStackWrap"></div>
+        </aside>
+
+      </main>
+
+      <!-- ============================================================
+           BOTTOM CONTROL BAR & CHUNKY 3D ARCADE BUTTONS
+           ============================================================ */ -->
+      <footer class="bottom-arcade-bar">
+        <!-- Chunky Blue Back Button -->
+        <button class="btn-arcade-blue" id="prevBtn" onclick="App.prevSlide()">
+          <span class="btn-arcade-arrow">◀</span>
+          <div class="btn-arcade-col-left">
+            <span>BACK</span>
+            <span class="btn-arcade-page-back" id="backPageLabel">(PAGE 1)</span>
+          </div>
+        </button>
+
+        <!-- Bottom Center Stepper & Glowing Marquee Ticker -->
+        <div class="bottom-center-stepper">
+          <!-- Stepper Nodes (1 to 5) -->
+          <div class="stepper-nodes-row">
+            <div class="step-node active" id="stepNode-1">1</div>
+            <div class="step-connector"></div>
+            <div class="step-node" id="stepNode-2">2</div>
+            <div class="step-connector"></div>
+            <div class="step-node" id="stepNode-3">3</div>
+            <div class="step-connector"></div>
+            <div class="step-node" id="stepNode-4">4</div>
+            <div class="step-connector"></div>
+            <div class="step-node" id="stepNode-5">5</div>
+          </div>
+
+          <!-- Glowing Marquee Ticker -->
+          <div class="bottom-ticker-wrap">
+            <span>💡 SHOW WHAT YOU KNOW! BASAHIN · UNAWAIN · PILIIN ANG TAMANG SAGOT!</span>
+          </div>
+        </div>
+
+        <!-- Glowing Golden-Amber Next Button -->
+        <button class="btn-arcade-gold" id="nextBtn" onclick="App.nextSlide()">
+          <div class="btn-arcade-col-right">
+            <span>NEXT</span>
+            <span class="btn-arcade-page-next" id="nextPageLabel">(PAGE 2)</span>
+          </div>
+          <span class="btn-arcade-arrow">▶</span>
+        </button>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- Draggable Ghost for Pointer DnD -->
+  <div id="dragGhost"></div>
+
+  <!-- Modular Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/mascots.js"></script>
+  <script src="js/stage.js"></script>
+  <script src="js/dnd.js"></script>
+  <script src="js/slides.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
