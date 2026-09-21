@@ -130,6 +130,13 @@ const App = {
     App.isTransitioning = true;
     App.handleSlideAudio(newSlideCfg.id);
 
+    // I-pause ang anumang tumutugtog na bidyo bago lumipat ng slide
+    if (oldSlideView) {
+      oldSlideView.querySelectorAll('video').forEach(v => {
+        try { v.pause(); } catch(e) {}
+      });
+    }
+
     // Position new slide for 3D entry
     if (direction === 'next') {
       newSlideView.classList.add('enter-next');
@@ -172,6 +179,9 @@ const App = {
     } else if (slideCfg.id === 'motivation-game') {
       titleEl.textContent = "HAMON SA PAG-UURI NG PAMILIHAN!";
       subtitleEl.textContent = "★ ★ HILAHIN AT I-PANGKAT ANG MGA PRODUKTO ★ ★";
+    } else if (slideCfg.id === 'abs-video') {
+      titleEl.textContent = "BIDYO PAMPAGKATUTO!";
+      subtitleEl.textContent = "★ ★ ESTRAKTURA NG PAMILIHAN ★ ★";
     } else if (slideCfg.id === 'abs-def' || slideCfg.id.startsWith('abs-')) {
       titleEl.textContent = "ESTRAKTURA NG PAMILIHAN";
       subtitleEl.textContent = "★ ★ ARALIN AT MGA KATANGIAN ★ ★";
@@ -200,10 +210,10 @@ const App = {
     // Update bottom stepper (1 to 5 mapping across major phases)
     let activeStep = 1;
     if (index >= 2 && index <= 7) activeStep = 1; // Panimula
-    else if (index >= 8 && index <= 9) activeStep = 2; // Activity
-    else if (index >= 10 && index <= 14) activeStep = 3; // Analysis
-    else if (index >= 15 && index <= 17) activeStep = 4; // Abstraction
-    else if (index >= 18) activeStep = 5; // Application & Evaluation
+    else if (index >= 8 && index <= 9) activeStep = 2; // Aktibiti
+    else if (index >= 10 && index <= 14) activeStep = 3; // Pagsusuri
+    else if (index >= 15 && index <= 19) activeStep = 4; // Abstraction (Bidyo + Talakayan)
+    else if (index >= 20) activeStep = 5; // Paglalapat & Pagtataya
 
     for (let i = 1; i <= 5; i++) {
       const node = document.getElementById(`stepNode-${i}`);

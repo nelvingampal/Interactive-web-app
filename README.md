@@ -17,14 +17,16 @@ Isang modernong interaktibong web application at gamified slide presentation par
 
 ## ✨ Mga Pangunahing Katangian (Features)
 
-1. **23 Modular Interactive Slides:**
-   - Panimulang Panalangin, Pagbati, at Smart Attendance Check (Quick Toggle / Batch selection)
+1. **24 Modular Interactive Slides:**
+   - Panimulang Panalangin na may Naka-embed na Bidyo (`videos/prayer.mp4`), Pagbati, at Smart Attendance Check
    - Mga Patakaran sa Silid-Aralan at Pagsusuri ng Layunin
-   - Balik-Aral at Pagganyak (Mystery Envelope / Deal or No Deal Concept)
-   - Talakayan na may 3D Flip Cards para sa mga Estraktura ng Pamilihan
-   - Interaktibong Drag and Drop Classification Game
-   - Pangkatang Gawain (Differentiated Instruction)
-   - Real-time Scored Quiz na may Gamification XP at Leaderboard
+   - Balik-Aral at Pagganyak na may Masiglang Musika (`audio/game-bgm.mp3`)
+   - Interaktibong Drag and Drop Classification Game ("Saan Sila Nabibilang?")
+   - 5-Aytem na Pamprosesong Tanong sa Pagsusuri (Analysis)
+   - Bagong Slide: Panimulang Bidyo ng Aralin (`videos/Istraktura ng Pamilihan.mp4`) bago ang talakayan
+   - Talakayan na may 3D Cards para sa Ganap at Hindi Ganap na Kompetisyon (Monopoly, Monopsony, Oligopoly, Monopolistic Competition)
+   - Pangkatang Gawain ("Suriin at Isadula!") na may 4 na Sobre at Rubrik sa Pagmamarka
+   - Real-time Scored Quiz na may Arcade Theme BGM (`audio/game-bgm-2.mp3`) at Victory SFX (`audio/game-sfx.mp3`)
    - Paglalahat, Takdang-Aralin, at Pangwakas na Panalangin
 
 2. **Arcade UI & Gamification Engine:**
@@ -51,7 +53,7 @@ interactive-web-app/
 ├── index.html              # Pangunahing presentation application
 ├── pamilihan-lesson.html   # Standalone copy para sa direct classroom serving
 ├── README.md               # Dokumentasyon ng proyekto
-├── validate_modular.js     # QA validation script para sa 23 slides
+├── validate_modular.js     # QA validation script para sa 24 slides
 ├── css/
 │   ├── main.css            # Base typography, layout, variables, at stage
 │   ├── components.css      # UI components (cards, quiz, attendance, envelopes)
@@ -60,7 +62,7 @@ interactive-web-app/
 └── js/
     ├── app.js              # State manager, sound engine, event coordination
     ├── data.js             # Lesson content, quiz items, attendance list, scenarios
-    ├── slides.js           # 23 Slide templates at interactive renderers
+    ├── slides.js           # 24 Slide templates at interactive renderers
     ├── stage.js            # Viewport scaler, aspect ratio, at presentation controls
     ├── dnd.js              # HTML5 drag-and-drop classification module
     └── mascots.js          # SVG character rendering at animations
@@ -88,6 +90,7 @@ Walang kailangang build tools o package manager — purong **Vanilla HTML5, CSS3
    - `←` : Nakaraang slide
    - `F` : Toggle Fullscreen presentation mode
    - `Esc` : Exit Fullscreen mode
+   - `M` : Toggle Music mute/unmute
 
 ---
 
@@ -97,7 +100,7 @@ Maaaring patakbuhin ang kasamang automated validation script:
 ```bash
 node validate_modular.js
 ```
-*Lahat ng 23 slides at interactive modules ay sumailalim sa 100% QA audit pass.*
+*Lahat ng 24 slides at interactive modules ay sumailalim sa 100% QA audit pass.*
 
 ---
 

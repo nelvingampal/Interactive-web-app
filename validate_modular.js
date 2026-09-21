@@ -135,9 +135,9 @@ console.log('✓ Mascots SVG generator verified (Aling Nena & Kuya Juan)');
 
 // Verify registered slides
 const slides = vm.runInContext('slides', context);
-console.log(`✓ Registered slides count: ${slides.length} (Expected: 23)`);
-if (slides.length !== 23) {
-  console.error(`ERROR: Expected 23 slides, found ${slides.length}`);
+console.log(`✓ Registered slides count: ${slides.length} (Expected: 24)`);
+if (slides.length !== 24) {
+  console.error(`ERROR: Expected 24 slides, found ${slides.length}`);
   process.exit(1);
 }
 
@@ -153,7 +153,16 @@ slides.forEach((s, idx) => {
     process.exit(1);
   }
 });
-console.log('✓ All 23 slides rendered clean HTML without errors');
+console.log('✓ All 24 slides rendered clean HTML without errors');
+
+// Verify video integration in prayer and abs-video slides
+const prayerSlide = slides.find(s => s.id === 'prayer').render();
+const absVideoSlide = slides.find(s => s.id === 'abs-video').render();
+if (!prayerSlide.includes('videos/prayer.mp4') || !absVideoSlide.includes('videos/Istraktura ng Pamilihan.mp4')) {
+  console.error('ERROR: Video integration verification failed!');
+  process.exit(1);
+}
+console.log('✓ Video files verified in prayer and abs-video slides');
 
 // Verify 2-tier hierarchy
 const perfectSlide = slides.find(s => s.id === 'abs-perfect').render();

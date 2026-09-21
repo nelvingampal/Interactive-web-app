@@ -1,5 +1,5 @@
 /* ============================================================
-   SLIDE DEFINITIONS & RENDERERS (23 SLIDES — ZERO SCROLL)
+   SLIDE DEFINITIONS & RENDERERS (24 SLIDES — ZERO SCROLL)
    DepEd Grade 9 Araling Panlipunan: Pamilihan Lesson
    Includes Filipino Mascots (Aling Nena & Kuya Juan)
    Section-Specific Theme Assignment & 16:9 Optimizations
@@ -181,22 +181,56 @@ registerSlide({
   nav: "Panimula: Panalangin",
   theme: "theme-classroom",
   render: () => `
-    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; height:100%;">
-      <span class="cue-badge gold anim-fade-up stagger-1">⏱ Panimula · 1. Panalangin</span>
-      <h2 class="slide-h2 anim-fade-up stagger-2" style="font-size:32px; margin-bottom:14px;">Panimulang Panalangin</h2>
-      
-      <div class="anim-fade-up stagger-3" style="display:flex; align-items:center; justify-content:center; gap:20px; margin-bottom:16px;">
-        ${Mascots.kuyaJuan('curious', 105)}
-        ${Mascots.speechBubble('Panginoon, gabayan Mo po kami sa aming pag-aaral ng ekonomiks at pamilihan ngayong araw.', 'left', 'yellow')}
+    <div style="display:flex; flex-direction:column; justify-content:space-between; height:100%;">
+      <div class="anim-fade-up stagger-1" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; flex-shrink:0;">
+        <span class="cue-badge gold" style="font-size:14px; padding:4px 12px; margin-bottom:0;">⏱ Panimula · 1. Panalangin</span>
+        <span style="font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:800; color:#FEF08A; background:rgba(0,0,0,0.35); padding:4px 10px; border-radius:6px;">
+          🙏 Pambungad na Panalangin
+        </span>
       </div>
 
-      <div class="meta-card white anim-fade-up stagger-4" style="max-width:760px; font-size:20px; font-weight:700; line-height:1.6; padding:24px 32px;">
-        <p style="color:var(--slate-board); margin-bottom:10px;">
-          "Tumayo ang lahat para sa ating panalangin. Manahimik at damhin ang presensya ng Poong Maykapal..."
+      <div class="anim-fade-up stagger-2" style="margin-bottom:8px; flex-shrink:0;">
+        <h2 class="slide-h2" style="font-size:28px; margin-bottom:2px;">Panimulang Panalangin</h2>
+        <p style="font-size:14px; font-weight:700; color:#475569; margin:0;">
+          Tumayo ang lahat, manahimik, at damhin ang presensya ng Poong Maykapal bago simulan ang ating aralin.
         </p>
-        <p style="font-size:16px; font-weight:800; color:var(--market-gold-dark);">
-          🙏 Panalangin bago magsimula ang klase
-        </p>
+      </div>
+
+      <!-- 2-Column Grid: Video Player (Left) + Text & Mascot (Right) -->
+      <div class="anim-fade-up stagger-3" style="display:grid; grid-template-columns: 1.35fr 1fr; gap:16px; flex:1; min-height:0; align-items:stretch;">
+        <!-- Left: Prayer Video Frame -->
+        <div style="display:flex; flex-direction:column; justify-content:center;">
+          <div class="video-frame-retro" style="height:100%; max-height:330px;">
+            <video id="prayerVideo" class="custom-video-player" controls playsinline preload="metadata">
+              <source src="videos/prayer.mp4" type="video/mp4">
+              Hindi sinusuportahan ng iyong browser ang video tag.
+            </video>
+          </div>
+          <div class="video-caption-bar">
+            <span>🎬 Panoorin at Sabayan ang Panalangin</span>
+            <span style="color:#FDE047;">▶ Pindutin ang Play</span>
+          </div>
+        </div>
+
+        <!-- Right: Mascots & Written Prayer Card -->
+        <div style="display:flex; flex-direction:column; justify-content:space-between; gap:10px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            ${Mascots.kuyaJuan('curious', 80)}
+            ${Mascots.speechBubble('Panginoon, gabayan Mo po kami sa aming pag-aaral ng pamilihan at ekonomiks.', 'left', 'yellow')}
+          </div>
+
+          <div class="meta-card white" style="padding:14px 18px; text-align:left; flex:1; display:flex; flex-direction:column; justify-content:center;">
+            <h3 style="font-family:'Space Grotesk',sans-serif; font-size:16px; color:var(--market-gold-dark); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+              <span>🙏</span> Panalangin ng Mag-aaral:
+            </h3>
+            <p style="font-size:15px; font-weight:700; color:var(--slate-board); line-height:1.45; margin-bottom:8px;">
+              "Panginoon naming Diyos, maraming salamat po sa panibagong araw at pagkakataong matuto. Buksan Mo po ang aming isipan upang maunawaan ang aming aralin at maging mabubuting mamamayan. Amen."
+            </p>
+            <div style="font-size:13px; font-weight:800; color:var(--market-red); background:#FEF2F2; padding:6px 10px; border-radius:6px; border-left:3px solid var(--market-red);">
+              💡 Paalala: Manatiling nakatayo nang maayos habang nagdarasal.
+            </div>
+          </div>
+        </div>
       </div>
     </div>`
 });
@@ -540,7 +574,76 @@ lessonData.analysisQuestions.forEach((item, index) => {
   });
 });
 
-/* 16. ABSTRACTION A - KAHULUGAN NG PAMILIHAN */
+/* 16. PANIMULANG BIDYO - ESTRAKTURA NG PAMILIHAN */
+registerSlide({
+  id: "abs-video",
+  nav: "Panoorin: Estraktura ng Pamilihan",
+  theme: "theme-abstraction",
+  render: () => `
+    <div style="display:flex; flex-direction:column; justify-content:space-between; height:100%;">
+      <div class="anim-fade-up stagger-1" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; flex-shrink:0;">
+        <span class="cue-badge gold" style="font-size:14px; padding:4px 12px; margin-bottom:0;">
+          ⏱ 12 Minuto · 3. ABSTRACTION (Panimulang Bidyo ng Aralin)
+        </span>
+        <div style="display:flex; align-items:center; gap:8px;">
+          ${Mascots.alingNena('happy', 60)}
+          ${Mascots.speechBubble('Panoorin natin ang bidyo bago ang talakayan!', 'left', 'yellow')}
+        </div>
+      </div>
+
+      <div class="anim-fade-up stagger-2" style="margin-bottom:6px; flex-shrink:0;">
+        <h1 class="slide-h1" style="font-size:26px; margin-bottom:2px; color:var(--slate-board);">
+          Panoorin: Estraktura ng Pamilihan
+        </h1>
+        <p style="font-size:13px; font-weight:700; color:#475569; margin:0;">
+          Tuklasin ang ugnayan ng mamimili at nagtitinda, presyo, at ang dalawang pangunahing anyo ng kompetisyon sa pamilihan.
+        </p>
+      </div>
+
+      <!-- 2-Column Display: Video Player (Left) + Gabay sa Panonood (Right) -->
+      <div class="anim-fade-up stagger-3" style="display:grid; grid-template-columns: 1.45fr 1fr; gap:14px; flex:1; min-height:0; align-items:stretch;">
+        <!-- Left: Video Player -->
+        <div style="display:flex; flex-direction:column; justify-content:center;">
+          <div class="video-frame-retro" style="height:100%; max-height:330px;">
+            <video id="pamilihanVideo" class="custom-video-player" controls playsinline preload="metadata">
+              <source src="videos/Istraktura ng Pamilihan.mp4" type="video/mp4">
+              Hindi sinusuportahan ng iyong browser ang video tag.
+            </video>
+          </div>
+          <div class="video-caption-bar">
+            <span>🎬 Bidyo: Estraktura ng Pamilihan (AP 9)</span>
+            <span style="color:#FDE047;">▶ Pindutin ang Play</span>
+          </div>
+        </div>
+
+        <!-- Right: Gabay at Pamprosesong Puntos -->
+        <div style="display:flex; flex-direction:column; justify-content:space-between; gap:8px;">
+          <div class="meta-card yellow" style="padding:12px 14px; flex:1;">
+            <h3 style="font-family:'Space Grotesk',sans-serif; font-size:15px; color:var(--market-red); margin-bottom:4px;">
+              🎯 Mga Gabay na Tanong sa Panonood:
+            </h3>
+            <ul style="font-size:13px; font-weight:700; line-height:1.4; color:#0F172A; padding-left:16px; margin:0;">
+              <li style="margin-bottom:4px;">Ano ang ugnayan ng <b>mamimili (consumer)</b> at <b>nagtitinda (prodyuser)</b>?</li>
+              <li style="margin-bottom:4px;">Bakit mahalaga ang <b>presyo</b> bilang tagapamagitan sa pamilihan?</li>
+              <li>Ano ang pagkakaiba ng <b>Ganap</b> at <b>Hindi Ganap na Kompetisyon</b>?</li>
+            </ul>
+          </div>
+
+          <div class="meta-card green" style="padding:10px 14px;">
+            <p style="font-size:12.5px; font-weight:800; color:#14532D; margin:0;">
+              💡 <b>Pansinin sa Bidyo:</b> Kilalanin ang mga halimbawa ng produkto tulad ng bigas, kuryente, tubig, at petrolyo!
+            </p>
+          </div>
+
+          <button class="btn-arcade-gold" style="padding:8px 16px; font-size:13px; width:100%; justify-content:center;" onclick="App.jumpToId('abs-def')">
+            <span>Tumuloy sa Kahulugan ng Pamilihan ➔</span>
+          </button>
+        </div>
+      </div>
+    </div>`
+});
+
+/* 17. ABSTRACTION A - KAHULUGAN NG PAMILIHAN */
 registerSlide({
   id: "abs-def",
   nav: "Kahulugan ng Pamilihan",
