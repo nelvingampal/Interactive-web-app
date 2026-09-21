@@ -17,6 +17,10 @@ const App = {
   attendanceTally: { 1: 0, 2: 0, 3: 0, 4: 0 },
   attendanceConfirmed: false,
 
+  // Background Music Controller (Para sa Interactive Games lamang)
+  isMusicMuted: false,
+  fadeInterval: null,
+
   // Group Leaderboard Scores
   groupScores: { 1: 500, 2: 350, 3: 250, 4: 200 },
 
@@ -48,8 +52,10 @@ const App = {
       bulbsWrap.innerHTML = Mascots.renderMarqueeBulbs(28);
     }
 
+    App.initAudio();
     App.updateHudStats();
     App.updateLeaderboardUI();
+    App.updateMusicButtonUI();
     App.renderSlide(0, 'init');
   },
 
@@ -117,10 +123,12 @@ const App = {
         newSlideCfg.afterRender();
       }
       App.updateNavigationLabels(targetIdx);
+      App.handleSlideAudio(newSlideCfg.id);
       return;
     }
 
     App.isTransitioning = true;
+    App.handleSlideAudio(newSlideCfg.id);
 
     // Position new slide for 3D entry
     if (direction === 'next') {
@@ -611,6 +619,122 @@ const App = {
     App.quizAnswers = [null, null, null, null, null];
     App.quizScore = 0;
     App.renderQuizQuestion(0);
+  },
+
+  // ============================================================
+  // BACKGROUND MUSIC CONTROLLER (INTERACTIVE GAMES ONLY)
+  // ============================================================
+  initAudio: () => {
+    const audio = document.getElementById('gameBgmAudio');
+    if (audio) {
+      audio.volume = 0.45;
+    }
+  },
+
+  isGameSlide: (slideId) => {
+    // Tanging ang interactive games lamang ang may tugtog
+    return slideId === 'motivation-game' || slideId === 'quiz';
+  },
+
+  handleSlideAudio: (slideId) => {
+    if (App.isGameSlide(slideId)) {
+      if (!App.isMusicMuted) {
+        App.playGameMusic();
+      }
+    } else {
+      App.stopGameMusic();
+    }
+    App.updateMusicButtonUI();
+  },
+
+  playGameMusic: () => {
+    const audio = document.getElementById('gameBgmAudio');
+    if (!audio || App.isMusicMuted) return;
+    if (App.fadeInterval) clearInterval(App.fadeInterval);
+
+    if (typeof audio.play !== 'function') return;
+
+    // Kung tumutugtog na at nasa tamang volume
+    if (!audio.paused && audio.volume >= 0.4) return;
+
+    audio.volume = 0;
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        let vol = 0;
+        App.fadeInterval = setInterval(() => {
+          vol = Math.min(0.45, +(vol + 0.05).toFixed(2));
+          if (audio) audio.volume = vol;
+          if (vol >= 0.45) clearInterval(App.fadeInterval);
+        }, 60);
+      }).catch(err => {
+        // Autoplay policy: tutugtog sa unang interaksyon ng guro/mag-aaral
+        console.log('Autoplay: magpe-play ang musika sa pagkilos ng user.');
+      });
+    }
+  },
+
+  stopGameMusic: () => {
+    const audio = document.getElementById('gameBgmAudio');
+    if (!audio) return;
+    if (App.fadeInterval) clearInterval(App.fadeInterval);
+
+    if (audio.paused) return;
+    if (typeof audio.pause !== 'function') return;
+
+    let vol = audio.volume;
+    if (vol <= 0.05) {
+      audio.pause();
+      audio.currentTime = 0;
+      return;
+    }
+
+    App.fadeInterval = setInterval(() => {
+      vol = Math.max(0, +(vol - 0.08).toFixed(2));
+      if (audio) audio.volume = vol;
+      if (vol <= 0) {
+        clearInterval(App.fadeInterval);
+        if (audio) {
+          audio.pause();
+          audio.currentTime = 0;
+        }
+      }
+    }, 50);
+  },
+
+  toggleMusic: () => {
+    App.isMusicMuted = !App.isMusicMuted;
+    const currentSlide = slides[App.currentSlideIdx];
+    if (App.isMusicMuted) {
+      App.stopGameMusic();
+    } else {
+      if (currentSlide && App.isGameSlide(currentSlide.id)) {
+        App.playGameMusic();
+      }
+    }
+    App.updateMusicButtonUI();
+  },
+
+  updateMusicButtonUI: () => {
+    const btn = document.getElementById('musicToggleBtn');
+    const icon = document.getElementById('musicToggleIcon');
+    const label = document.getElementById('musicToggleLabel');
+    if (!btn || !icon || !label) return;
+
+    const currentSlide = slides[App.currentSlideIdx];
+    const isGame = currentSlide && App.isGameSlide(currentSlide.id);
+
+    if (App.isMusicMuted) {
+      btn.className = 'hud-btn-music is-muted';
+      icon.textContent = '🔇';
+      label.textContent = 'WALANG TUGTOG';
+      btn.title = 'Naka-mute ang musika (Pindutin o pindutin ang M para I-on)';
+    } else {
+      btn.className = 'hud-btn-music' + (isGame ? ' is-playing' : '');
+      icon.textContent = '🎵';
+      label.textContent = isGame ? 'TUMUTUGTOG' : 'MUSIKA';
+      btn.title = isGame ? 'Tumutugtog ang musika sa laro (Pindutin o M para I-mute)' : 'Naka-on ang musika para sa laro (Pindutin o M para I-mute)';
+    }
   }
 };
 

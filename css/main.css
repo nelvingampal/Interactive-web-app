@@ -412,6 +412,50 @@ html, body {
   box-shadow: 0 3px 0 var(--btn-blue-edge), 0 0 10px rgba(56, 189, 248, 0.5);
 }
 
+/* Music Toggle Button */
+.hud-btn-music {
+  background: linear-gradient(180deg, #10B981 0%, #059669 100%);
+  color: #FFFFFF;
+  border: 1.5px solid #34D399;
+  border-radius: 7px;
+  padding: 4px 10px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 2px 0 #047857;
+  transition: all 0.2s ease;
+}
+
+.hud-btn-music.is-muted {
+  background: linear-gradient(180deg, #64748B 0%, #475569 100%);
+  border-color: #94A3B8;
+  box-shadow: 0 2px 0 #334155;
+  opacity: 0.85;
+}
+
+.hud-btn-music.is-playing {
+  animation: hudMusicPulse 2s infinite ease-in-out;
+}
+
+@keyframes hudMusicPulse {
+  0%, 100% { box-shadow: 0 2px 0 #047857, 0 0 8px rgba(52, 211, 153, 0.4); }
+  50% { box-shadow: 0 2px 0 #047857, 0 0 16px rgba(52, 211, 153, 0.85); }
+}
+
+.hud-btn-music:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 0 #047857, 0 0 10px rgba(52, 211, 153, 0.6);
+}
+
+.hud-music-label {
+  font-size: 10px;
+  font-weight: 900;
+}
+
 /* ============================================================
    MAIN GAME ARENA GRID (THREE-COLUMN DESK LAYOUT)
    ============================================================ */

@@ -41,6 +41,10 @@ const StageController = {
         App.prevSlide();
       } else if (e.key === 'f' || e.key === 'F') {
         StageController.toggleFullscreen();
+      } else if (e.key === 'm' || e.key === 'M') {
+        if (typeof App.toggleMusic === 'function') {
+          App.toggleMusic();
+        }
       }
     });
 
