@@ -388,6 +388,8 @@ const App = {
       card.style.borderColor = '#F59E0B';
       card.style.boxShadow = '0 0 18px rgba(251, 191, 36, 0.45), 0 8px 22px rgba(0, 0, 0, 0.25)';
       App.addScore(20);
+      App.playSfx('correct');
+      App.ensureGameMusicPlaying('application');
     }
   },
 
@@ -415,6 +417,9 @@ const App = {
     const isBest = choiceIdx === item.bestIndex;
     if (isBest) {
       App.addScore(50);
+      App.playSfx('correct');
+    } else {
+      App.playSfx('wrong');
     }
 
     item.choices.forEach((_, cIdx) => {
@@ -589,9 +594,12 @@ const App = {
     if (choiceIdx === q.correct) {
       App.quizScore++;
       App.addScore(50);
-      App.playSfx();
+      App.playSfx('correct');
+    } else {
+      App.playSfx('wrong');
     }
 
+    App.ensureGameMusicPlaying('quiz');
     App.renderQuizQuestion(qIdx);
   },
 
@@ -635,29 +643,89 @@ const App = {
   // ============================================================
   // BACKGROUND MUSIC & SFX CONTROLLER (INTERACTIVE GAMES ONLY)
   // ============================================================
+  audioCtx: null,
+
   initAudio: () => {
     const bgm1 = document.getElementById('gameBgmAudio');
     const bgm2 = document.getElementById('gameBgmQuizAudio');
     const sfx = document.getElementById('gameSfxAudio');
-    if (bgm1) bgm1.volume = 0.45;
-    if (bgm2) bgm2.volume = 0.45;
-    if (sfx) sfx.volume = 0.65;
+    const wrong = document.getElementById('gameWrongAudio');
+    if (bgm1) bgm1.volume = 0.65;
+    if (bgm2) bgm2.volume = 0.65;
+    if (sfx) sfx.volume = 0.85;
+    if (wrong) wrong.volume = 0.75;
   },
 
   isGameSlide: (slideId) => {
-    // Tanging ang interactive games lamang ang may background music
-    return slideId === 'motivation-game' || slideId === 'quiz';
+    // Tanging ang interactive games at activities lamang ang may masiglang musika
+    return slideId === 'motivation-intro' || 
+           slideId === 'motivation-game' || 
+           slideId === 'application' || 
+           slideId === 'quiz';
   },
 
-  playSfx: () => {
+  synthSfx: (type) => {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      if (!App.audioCtx) App.audioCtx = new AudioCtx();
+      if (App.audioCtx.state === 'suspended') {
+        App.audioCtx.resume();
+      }
+      const ctx = App.audioCtx;
+      const now = ctx.currentTime;
+
+      if (type === 'wrong') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(160, now);
+        osc.frequency.linearRampToValueAtTime(110, now + 0.22);
+        gain.gain.setValueAtTime(0.28, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.22);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.24);
+      } else {
+        // Bright sparkling victory chime (C6, E6, G6, C7)
+        const notes = [1046.5, 1318.5, 1567.98, 2093.0];
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.05);
+          gain.gain.setValueAtTime(0.22, now + idx * 0.05);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.05 + 0.35);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + idx * 0.05);
+          osc.stop(now + idx * 0.05 + 0.38);
+        });
+      }
+    } catch (e) {}
+  },
+
+  playSfx: (type = 'correct') => {
     if (App.isMusicMuted) return;
-    const sfx = document.getElementById('gameSfxAudio');
-    if (sfx && typeof sfx.play === 'function') {
+    const targetAudio = type === 'wrong' 
+      ? document.getElementById('gameWrongAudio') 
+      : document.getElementById('gameSfxAudio');
+
+    if (targetAudio && typeof targetAudio.play === 'function') {
       try {
-        sfx.currentTime = 0;
-        const p = sfx.play();
-        if (p !== undefined) p.catch(() => {});
-      } catch (e) {}
+        targetAudio.currentTime = 0;
+        const p = targetAudio.play();
+        if (p !== undefined) {
+          p.catch(() => {
+            App.synthSfx(type);
+          });
+        }
+      } catch (e) {
+        App.synthSfx(type);
+      }
+    } else {
+      App.synthSfx(type);
     }
   },
 
@@ -690,23 +758,35 @@ const App = {
 
     if (typeof audio.play !== 'function') return;
 
-    // Kung tumutugtog na at nasa tamang volume
-    if (!audio.paused && audio.volume >= 0.4) return;
-
-    audio.volume = 0;
+    audio.volume = 0.65;
     const playPromise = audio.play();
     if (playPromise !== undefined) {
       playPromise.then(() => {
-        let vol = 0;
-        App.fadeInterval = setInterval(() => {
-          vol = Math.min(0.45, +(vol + 0.05).toFixed(2));
-          if (audio) audio.volume = vol;
-          if (vol >= 0.45) clearInterval(App.fadeInterval);
-        }, 60);
+        App.updateMusicButtonUI();
       }).catch(err => {
-        // Autoplay policy: tutugtog sa unang interaksyon ng guro/mag-aaral
-        console.log('Autoplay: magpe-play ang musika sa unang pagkilos ng user.');
+        console.log('Autoplay: magpe-play sa unang pagkilos ng user.');
+        const startOnUserAction = () => {
+          if (!App.isMusicMuted && App.isGameSlide(slides[App.currentSlideIdx]?.id)) {
+            audio.play().catch(() => {});
+            App.updateMusicButtonUI();
+          }
+          window.removeEventListener('pointerdown', startOnUserAction);
+          window.removeEventListener('keydown', startOnUserAction);
+        };
+        window.addEventListener('pointerdown', startOnUserAction, { once: true });
+        window.addEventListener('keydown', startOnUserAction, { once: true });
       });
+    }
+  },
+
+  ensureGameMusicPlaying: (slideId) => {
+    if (App.isMusicMuted) return;
+    const targetAudioId = slideId === 'quiz' ? 'gameBgmQuizAudio' : 'gameBgmAudio';
+    const audio = document.getElementById(targetAudioId);
+    if (audio && audio.paused) {
+      audio.volume = 0.65;
+      audio.play().catch(() => {});
+      App.updateMusicButtonUI();
     }
   },
 
@@ -730,7 +810,7 @@ const App = {
       }
 
       App.fadeInterval = setInterval(() => {
-        vol = Math.max(0, +(vol - 0.08).toFixed(2));
+        vol = Math.max(0, +(vol - 0.1).toFixed(2));
         if (audio) audio.volume = vol;
         if (vol <= 0) {
           clearInterval(App.fadeInterval);
@@ -739,7 +819,7 @@ const App = {
             audio.currentTime = 0;
           }
         }
-      }, 50);
+      }, 40);
     });
   },
 

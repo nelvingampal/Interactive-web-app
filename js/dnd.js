@@ -194,6 +194,9 @@ const DnDController = {
   },
 
   toggleTapItem: (item) => {
+    if (typeof App !== 'undefined' && App.ensureGameMusicPlaying) {
+      App.ensureGameMusicPlaying('motivation-game');
+    }
     const chip = document.getElementById('chip-' + item.id);
     if (!chip) return;
 
@@ -221,8 +224,9 @@ const DnDController = {
     const container = document.getElementById('items-' + categoryId);
     if (container) {
       const isCorrect = item.correct === categoryId;
-      if (isCorrect && typeof App !== 'undefined' && App.playSfx) {
-        App.playSfx();
+      if (typeof App !== 'undefined') {
+        if (App.playSfx) App.playSfx(isCorrect ? 'correct' : 'wrong');
+        if (App.ensureGameMusicPlaying) App.ensureGameMusicPlaying('motivation-game');
       }
       const badge = document.createElement('div');
       badge.className = 'placed-badge ' + (isCorrect ? 'correct' : 'wrong');
